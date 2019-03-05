@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GenerateFullPaths>true</GenerateFullPaths>
+    <BuildClient>true</BuildClient>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.server.kestrel" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <Target Name="AddWwwRoot" AfterTargets="AfterBuild" Condition="'$(BuildClient)' and '$(OS)' == 'Windows_NT'">
+    <Exec Command="cmd /c ..\build-tools\yarn-build.cmd ..\client $(OutputPath)wwwroot"/>
+  </Target>
+
+  <Target Name="AddWwwRoot" AfterTargets="AfterBuild" Condition="'$(BuildClient)' and '$(OS)' != 'Windows_NT'">
+    <Exec Command="bash ../build-tools/yarn-build.sh ../client $(OutputPath)wwwroot"/>
+  </Target>
+
+</Project>
